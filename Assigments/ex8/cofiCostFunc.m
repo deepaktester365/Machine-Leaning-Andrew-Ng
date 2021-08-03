@@ -44,23 +44,13 @@ ThetaX = X * Theta';
 
 mat_J = (1/2) * ((((X * Theta') - Y) .* R) .^ 2);
 
-Theta_R = Theta .* R;
-
-Theta_reg = sum(sum(Theta_R * Theta_R'))
-
-X_R = X .* R;
-
-X_reg = sum(sum(X_R * X_R'))
-
 exp_in = (ThetaX - Y) .* R;
 
-sum_mat_J = sum(sum(mat_J))
+J =  sum(sum(mat_J)) + (lambda/2) * sum(sum(Theta .* Theta)) + (lambda/2) * sum(sum(X .* X));
 
-J =  sum_mat_J + (lambda/2) * Theta_reg + (lambda/2) * X_reg;
+X_grad = exp_in * Theta + lambda * X;
 
-X_grad = exp_in * Theta;
-
-Theta_grad = (X' * exp_in)';
+Theta_grad = (X' * exp_in)' + lambda * Theta;
 
 % =============================================================
 

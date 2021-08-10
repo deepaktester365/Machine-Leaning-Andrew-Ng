@@ -26,8 +26,22 @@ def gradient_descent(X, y, theta, alpha):
     m = len(y)
     ThetaX = np.matmul(X, theta)
     diff = np.subtract(ThetaX, y)
-    new_term = (alpha / m) * np.matmul(np.transpose(X), ThetaX)
-    print(new_term)
+    new_term = (alpha / m) * np.matmul(np.transpose(X), diff)
     theta = np.subtract(theta, new_term)
-    print(theta)
+    return theta
+
+
+def feature_normalize(X):
+    mean_x = np.mean(X, axis=0)
+    std_x = np.std(X, axis=0, dtype=np.float64)
+    X_norm = (X - mean_x) / std_x
+    return X_norm, mean_x, std_x
+
+
+def normal_eqn(X, y):
+    # theta = pinv(X'*X)*(X'*y);
+    Xty = np.matmul(np.transpose(X), y)
+    Xtx = np.matmul(np.transpose(X), X)
+    Xtxinv = np.linalg.inv(Xtx)
+    theta = np.matmul(Xtxinv, Xty)
     return theta

@@ -1,14 +1,45 @@
 import torch
 import numpy as np
+import sys
 
 from modules.CostFunction import squared_error_cost_function
 from modules.Prediction import univariate_liner_reg_prediction
-from modules.plotter import theta_cost_plot
+from modules.plotter import theta_cost_plot, visual_plot
 from modules.GradientDescent import gradient_descent
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 grad_req = True
 debug = False
+
+data = np.loadtxt('./ex1/ex1data1.txt', delimiter=",")
+
+m = data.shape[0]
+
+# Add a column of ones to x
+x_np = np.column_stack((np.ones(m), data[:, 0]))
+
+x_data = torch.tensor(x_np, dtype=torch.float32,
+                      device=device, requires_grad=grad_req)
+
+y_data = torch.tensor(data[:, 1], dtype=torch.float32,
+                      device=device, requires_grad=grad_req).unsqueeze(1)
+
+# initializing fitting parameters
+theta = torch.tensor(np.zeros((2, 1)), dtype=torch.float32,
+                     device=device, requires_grad=grad_req)
+alpha = 0.01
+
+cost = squared_error_cost_function(x_data, y_data, theta, debug=debug)
+
+print(cost)
+
+
+# visual_plot(x_data, y_data)
+
+# print(x_data)
+# print(y_data)
+
+sys.exit()
 
 x_list = np.asarray([[1, 1], [1, 2], [1, 3]])
 y_list = np.asarray([[1], [2], [3]])
